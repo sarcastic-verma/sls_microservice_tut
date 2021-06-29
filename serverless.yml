@@ -10,11 +10,12 @@ provider:
   runtime: nodejs12.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
-  
+  region: ap-south-1
+
 functions:
-  hello:
-    handler: src/handlers/hello.handler
+  createAuction:
+    handler: dist/handlers/createAuction.handler
     events:
       - http:
-          method: GET
-          path: /hello
+          method: POST
+          path: /auction # can remove '/' if OCD kicks in, its not required
