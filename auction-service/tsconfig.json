@@ -6,6 +6,7 @@
     "allowJs": true,
     "checkJs": false,
     "outDir": "dist",
+    "noImplicitUseStrict": true,
     "strict": false,
     "strictNullChecks": false,
     "noImplicitThis": true,
