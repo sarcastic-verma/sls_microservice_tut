@@ -1,0 +1,23 @@
+service: auction-service
+
+frameworkVersion: "2"
+useDotenv: true
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: ap-south-1
+
+functions:
+  createAuction:
+    handler: dist/handlers/createAuction.handler
+    events:
+      - http:
+          method: POST
+          path: /auction # can remove '/' if OCD kicks in, its not required
