@@ -10,9 +10,24 @@ plugins:
 provider:
   name: aws
   runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: ap-south-1
+
+resources:
+  Resources:
+    AuctionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AuctionsTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
 
 functions:
   createAuction:
