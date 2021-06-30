@@ -16,7 +16,7 @@ const createAuction = async (event, context) => {
     };
 
     await dynamoDb
-        .put({ TableName: 'AuctionsTable', Item: auction }) // weird naming convention
+        .put({ TableName: process.env.AUCTIONS_TABLE_NAME, Item: auction }) // weird naming convention
         .promise(); // they use callbacks by def
 
     return {

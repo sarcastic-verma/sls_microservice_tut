@@ -12,28 +12,16 @@ provider:
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
   memorySize: 256
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
   stage: ${opt:stage, 'dev'}
   region: ap-south-1
-  iamRoleStatements: # gives perm to access dynamoDb
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-      Resource:
-        - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/AuctionsTable # using'#' for string interpolation
+  iamRoleStatements:
+    - ${file(iam/auctionsTableIAM.yml):AuctionsTableIAM}
 
 resources:
   Resources:
-    AuctionsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: AuctionsTable
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
+    AuctionsTable: ${file(resources/auctionsTable.yml):AuctionsTable}
 
 functions:
   createAuction:
@@ -42,3 +30,10 @@ functions:
       - http:
           method: POST
           path: /auction # can remove '/' if OCD kicks in, its not required
+
+custom:
+  AuctionsTable:
+    name: !Ref AuctionsTable
+    arn: !GetAtt AuctionsTable.Arn
+  bundle:
+    linting: false
